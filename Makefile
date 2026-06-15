@@ -6,14 +6,14 @@
 # --- OS detection ---
 ifeq ($(OS),Windows_NT)
     PYTHON      = python
-    VENV_PYTHON = venv\Scripts\python
-    VENV_PIP    = venv\Scripts\pip
+    VENV_PYTHON = .venv\Scripts\python.exe
+    VENV_PIP    = .venv\Scripts\pip.exe
     SEP         = ;
     NULL        = nul
 else
     PYTHON      = python3
-    VENV_PYTHON = venv/bin/python
-    VENV_PIP    = venv/bin/pip
+    VENV_PYTHON = .venv/bin/python
+    VENV_PIP    = .venv/bin/pip
     SEP         = :
     NULL        = /dev/null
 endif
@@ -24,7 +24,7 @@ APP_NAME = ticket_timeout
 
 # --- File target: only creates venv when the Python interpreter is missing ---
 $(VENV_PYTHON):
-	$(PYTHON) -m venv venv
+	$(PYTHON) -m venv .venv
 
 help:
 	@echo "Usage: make [target]"
@@ -49,7 +49,7 @@ run: $(VENV_PYTHON)
 	@$(VENV_PYTHON) -m $(APP_NAME)
 
 test: $(VENV_PYTHON)
-	$(VENV_PIP) install pytest pytest-cov 2>&1 | tail -1
+	$(VENV_PIP) install pytest pytest-cov 2>&1
 	$(VENV_PYTHON) -m pytest tests/ -v --cov=src/$(APP_NAME) --cov-report=term-missing
 
 build: $(VENV_PYTHON)
